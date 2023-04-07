@@ -2,3 +2,4 @@ node_modules
 files
 .env.serve-dev
 .env.serve-prod
+.env

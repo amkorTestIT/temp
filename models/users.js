@@ -22,6 +22,8 @@ const signup = ({ account, password }) => {
  * @param String
  * @returns { Boolean }
  */
+const findAll = async () => await Users.find({}).lean().exec()
+
 const isExit = async (account) => await Users.exists({ account: account })
 
 const findById = async (id) => await Users.findById(id).lean().exec()
@@ -80,6 +82,7 @@ const checkUserAuth = async (account) => {
 
 module.exports = {
     signup,
+    findAll,
     isExit,
     findById,
     getAccount,

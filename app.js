@@ -5,9 +5,9 @@ const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
-const { getAccount, findById, signup } = require('./models/users.js')
+const { getAccount, findById, signup, findAll } = require('./models/users.js')
 const session = require('express-session')
-// const MongoStore = require('connect-mongo')
+const MongoStore = require('connect-mongo')
 const bcrypt = require('bcryptjs')
 console.log(path.join(__dirname, `.env.serve-${process.env.NODE_ENV}`))
 require('dotenv').config({
@@ -48,11 +48,17 @@ const db = {
     password: process.env.DB_USER_PWD || '',
 }
 console.log(db)
+const dbURI = `mongodb://${encodeURIComponent(db.user)}:${encodeURIComponent(
+    db.password
+)}@${db.host}:${db.port}/${db.name}`
 app.use(
     session({
         secret: 'secret',
         resave: false,
         saveUninitialized: false,
+        store: MongoStore.create({
+            mongoUrl: dbURI,
+        }),
     })
 )
 /*---------------------------------------------------------*/
@@ -66,6 +72,9 @@ passport.use(
         { usernameField: 'account', passwordField: 'password' },
         async (account, password, done) => {
             try {
+                console.log(account, password)
+                const allUser = await findAll()
+                console.log(allUser)
                 const user = await getAccount(account)
                 if (!user) return done(null, false)
                 if (!bcrypt.compareSync(password, user.password))

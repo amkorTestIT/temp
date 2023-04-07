@@ -9,9 +9,10 @@ const db = {
 module.exports = () => {
     mongoose.set('strictQuery', false)
 
-    const dbURI = `mongodb+srv://${db.user}:${encodeURIComponent(
-        db.password
-    )}@${db.host}/${db.name}`
+    const dbURI = `mongodb://${encodeURIComponent(
+        db.user
+    )}:${encodeURIComponent(db.password)}@${db.host}:${db.port}/${db.name}`
+    console.log(dbURI)
     const options = {
         autoIndex: true,
         maxPoolSize: 10, // Maintain up to 10 socket connections
