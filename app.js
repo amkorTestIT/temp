@@ -7,7 +7,7 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const { getAccount, findById, signup } = require('./models/users.js')
 const session = require('express-session')
-const MongoStore = require('connect-mongo')
+// const MongoStore = require('connect-mongo')
 const bcrypt = require('bcryptjs')
 console.log(path.join(__dirname, `.env.serve-${process.env.NODE_ENV}`))
 require('dotenv').config({
@@ -47,16 +47,12 @@ const db = {
     user: process.env.DB_USER || '',
     password: process.env.DB_USER_PWD || '',
 }
+console.log(db)
 app.use(
     session({
         secret: 'secret',
         resave: false,
         saveUninitialized: false,
-        store: MongoStore.create({
-            mongoUrl: `mongodb+srv://${db.user}:${encodeURIComponent(
-                db.password
-            )}@${db.host}/${db.name}`,
-        }),
     })
 )
 /*---------------------------------------------------------*/
